@@ -84,3 +84,19 @@ const runTracker = () => {
       }
     });
 };
+
+const employeeSearch = () => {
+    const query = 
+        `SELECT employee.id, employee.first_name, employee.last_name, role.id AS role_id, role.title, role.salary, department.name AS department, department.id AS department_id, employee.manager_id
+        FROM employee
+        INNER JOIN role ON (role.id = employee.role_id)
+        INNER JOIN department ON (department.id = role.department_id)
+        ORDER BY employee.id;`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.log('VIEW ALL EMPLOYEES')
+        console.log('\n')
+        console.table(res);
+        runTracker();
+    });
+}
