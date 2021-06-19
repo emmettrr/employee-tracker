@@ -1,5 +1,4 @@
 const inquirer = require("inquirer");
-const table = require("console.table");
 const mysql = require("mysql");
 
 const connection = mysql.createConnection({
@@ -93,9 +92,40 @@ const employeeSearch = () => {
         ORDER BY employee.id;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
+    console.log("\n");
     console.log("VIEW ALL EMPLOYEES");
+    console.table(res);
+    runTracker();
+  });
+};
+
+const departmentSearch = () => {
+  const query = `SELECT employee.id, employee.first_name, employee.last_name, role.id AS role_id, role.title, role.salary, department.name AS department, department.id AS department_id, employee.manager_id
+        FROM employee
+        INNER JOIN role ON (role.id = employee.role_id)
+        INNER JOIN department ON (department.id = role.department_id)
+        ORDER BY department.id;`;
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.log("VIEW ALL EMPLOYEES BY DEPARTMENT");
     console.log("\n");
     console.table(res);
     runTracker();
   });
 };
+
+const roleSearch = () => {
+  const query = 
+      `SELECT employee.id, employee.first_name, employee.last_name, role.id AS role_id, role.title, role.salary, department.name AS department, department.id AS department_id, employee.manager_id
+      FROM employee
+      INNER JOIN role ON (role.id = employee.role_id)
+      INNER JOIN department ON (department.id = role.department_id)
+      ORDER BY role.id;`
+  connection.query(query, (err, res) => {
+      if (err) throw err;
+      console.log('VIEW ALL EMPLOYEES BY ROLE')
+      console.log('\n')
+      console.table(res);
+      runTracker();
+  })
+}
