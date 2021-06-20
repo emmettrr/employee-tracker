@@ -195,4 +195,7 @@ const updateRole = async () => {
       choices: roleChoices,
     },
   ]);
-};
+  await connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [roleID, employeeID])
+  console.log('SUCCESSFULLY UPDATED EMPLOYEE')
+  runTracker();
+}
