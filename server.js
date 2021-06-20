@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const util = require("util");
+const cTable = require('console.table')
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -132,7 +133,9 @@ const roleSearch = () => {
   });
 };
 
-const addEmployee = () => {};
+const addEmployee = () => {
+  
+};
 
 const viewDepartments = () => {
   const query = `SELECT department.name AS department, department.id AS department_id
@@ -147,7 +150,21 @@ const viewDepartments = () => {
   });
 };
 
-const addDepartment = () => {};
+const addDepartment = () => {
+  inquirer
+  .prompt({
+      name: "department",
+      type: "input",
+      message: "What is the name of the new department?",
+  })
+  .then(function(answer){
+      const query = "INSERT INTO department (name) VALUES ( ? )";
+      connection.query(query, answer.department, function(err, res){
+          console.log(`You have added: ${(answer.department).toUpperCase()}.`)
+      })
+      viewDepartments();
+  })
+};
 
 const viewRoles = () => {
   const query = `SELECT role.title, role.id AS role_id
@@ -162,9 +179,7 @@ const viewRoles = () => {
   });
 };
 
-const addRole = () => {
-  //    query all departments
-};
+const addRole = () => {};
 
 const updateRole = async () => {
   const allEmployees = await connection.query(`SELECT * FROM employee`);
@@ -195,7 +210,10 @@ const updateRole = async () => {
       choices: roleChoices,
     },
   ]);
-  await connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [roleID, employeeID])
-  console.log('SUCCESSFULLY UPDATED EMPLOYEE')
+  await connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [
+    roleID,
+    employeeID,
+  ]);
+  console.log("SUCCESSFULLY UPDATED EMPLOYEE");
   runTracker();
-}
+};
