@@ -165,3 +165,7 @@ const viewRoles = () => {
         runTracker();
     })
 }
+
+const addRole = () => {
+  //    query all departments
+  }
