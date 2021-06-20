@@ -147,3 +147,21 @@ const viewDepartments = () => {
       runTracker();
   })
 }
+
+const addDepartment = () => {
+   
+}
+
+const viewRoles = () => {
+    const query = 
+        `SELECT role.title, role.id AS role_id
+        FROM role
+        ORDER BY role.id;`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.log('VIEW ALL ROLES')
+        console.log('\n')
+        console.table(res);
+        runTracker();
+    })
+}
