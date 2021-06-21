@@ -1,7 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const util = require("util");
-const cTable = require('console.table')
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -133,9 +132,7 @@ const roleSearch = () => {
   });
 };
 
-const addEmployee = () => {
-  
-};
+const addEmployee = () => {};
 
 const viewDepartments = () => {
   const query = `SELECT department.name AS department, department.id AS department_id
@@ -152,18 +149,18 @@ const viewDepartments = () => {
 
 const addDepartment = () => {
   inquirer
-  .prompt({
+    .prompt({
       name: "department",
       type: "input",
       message: "What is the name of the new department?",
-  })
-  .then(function(answer){
+    })
+    .then(function (answer) {
       const query = "INSERT INTO department (name) VALUES ( ? )";
-      connection.query(query, answer.department, function(err, res){
-          console.log(`You have added: ${(answer.department).toUpperCase()}.`)
-      })
+      connection.query(query, answer.department, function (err, res) {
+        console.log(`You have added: ${answer.department.toUpperCase()}.`);
+      });
       viewDepartments();
-  })
+    });
 };
 
 const viewRoles = () => {
@@ -179,7 +176,35 @@ const viewRoles = () => {
   });
 };
 
-const addRole = () => {};
+const addRole = () => {
+  connection.query("SELECT * FROM department", function (err, res) {
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        name: "title",
+        type: "input",
+        message: "What is the title of the new role?",
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is the salary of the new role?",
+      },
+      {
+        name: "departmentName",
+        type: "list",
+        message: "Which department does this role fall into?",
+        choices: function () {
+          const choicesArray = [];
+          res.forEach((res) => {
+            choicesArray.push(res.name);
+          });
+          return choicesArray;
+        },
+      },
+    ]);
+  });
+};
 
 const updateRole = async () => {
   const allEmployees = await connection.query(`SELECT * FROM employee`);
