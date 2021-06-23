@@ -208,7 +208,7 @@ const addEmployee = () => {
                       `You have added the employee: ${values[0].toUpperCase()}.`
                     );
                   });
-                  viewEmployees();
+                  employeeSearch();
                 });
               });
           });
@@ -366,7 +366,7 @@ const addRole = () => {
                         );
                       }
                     );
-                    viewEmployees();
+                    employeeSearch();
                   }
                 );
               });
